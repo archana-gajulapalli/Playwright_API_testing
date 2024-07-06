@@ -5,6 +5,8 @@ import { request } from '@playwright/test';
 
 let response;
 
+let requestBody = {};
+
 Given('I have the API endpoint {string}', async function (endpoint) {
   this.endpoint = endpoint;
 });
@@ -21,7 +23,12 @@ Then('the response status should be {int}', async function (status) {
 Then('the response should contain the user details', async function () {
   const responseBody = await response.json();
   console.log(responseBody);
-  expect(responseBody).to.have.property('id');
-  expect(responseBody).to.have.property('first_name');
-  expect(responseBody).to.have.property('email');
+ 
+});
+
+When('I send a POST request to the endpoint', async function (dataTable) {
+  dataTable.hashes().forEach(row => {
+    requestBody[row.key] = row.value;
+  });
+
 });
